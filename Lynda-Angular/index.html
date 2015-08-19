@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+	<meta charset="UTF-8">
+	<title>Lynda - Angular Tutorials</title>
+	<script type="text/javascript" src="lib/angular/angular.min.js"></script>
+	<script type="text/javascript" src="js/controllers.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+	<div class="main" ng-controller="MyController">
+		<div class="search">
+			<h1>Artist Directory</h1>
+			<label>Search: </label>
+			<!-- if you add a ng-model to an input field, you can use that search for specific data somewhere else -->
+			<input ng-model="query" type="text" placeholder="Search for artists" autofocus>
+
+			<label class="formgroup">by:
+				<select ng-model="artistOrder">
+					<!-- the values of these fields have to match the values inside of the objects inside the .json file that is being injected into the controller in controller.js -->
+					<option value="name">Name</option>
+					<option value="reknown">Reknown</option>
+				</select>
+			</label>
+
+			<label class="formgroup">
+				<input type="radio" ng-model="direction" name="direction" checked>
+				Ascending
+			</label>
+			<label class="formgroup">
+				<input type="radio" ng-model="direction" name="direction" value="reverse">
+				Descending
+			</label>
+		</div>
+		<ul class="artistlist">
+			<!-- ng-repeat will go through a list of things. In this case it'll traverse the artists scope in the controller.js file and store the information in a variable called "item" -->
+			<!-- you can add | filter: to search for whatever you've type in the input field above using the ng-model= name -->
+			<!-- you can add multiple filters. | orderBy, orders all the objects alphabetically -->
+			<!-- :direction adds a subfilter and makes it so we can reverse the order at which the data is displayed-->
+			<li class="artist cf" ng-repeat="item in artists | filter:query | orderBy:artistOrder:direction">
+				<!-- we can use an angular call to the shortname inside our artists objects because all of the images are using that shortname + _tn.jpg. This way you don't have to write out each link seperately. You also have to use ng-src instead of src. This makes it so the browser doesn't try to find the placeholder and waits for Angular to load completely. -->
+				<img ng-src="images/{{item.shortname}}_tn.jpg" alt="Photo of {{item.name}}">
+				<div class="info">
+					<!-- you can use filters on angular calls by using | ... in this case, it's making all of the names uppercase -->
+					<h2>{{item.name}}</h2>
+					<h3>{{item.reknown}}</h3>
+				</div>
+			</li>
+		</ul>
+	</div>
+</body>
+</html>
